@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ["en"] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -67,3 +67,66 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# app/config/config.yml
+easy_admin:
+    site_name: "Alea"
+    design:
+        form_theme: 'vertical'
+        brand_color: '#2980b9'
+        color_scheme: 'light'
+        assets:
+            favicon: '/assets/backend/favicon.png'
+    formats:
+        date: 'd/m/Y'
+        time: 'H:i'
+        datetime: 'd/m/Y H:i:s'
+    entities:
+
+        #TABLE PLAYER ['id', 'name', 'idTeam','teams']
+        Player:
+            class: AppBundle\Entity\Player
+            label: 'Player'
+            list: 
+                title: '%%entity_label%% listing'
+                fields: ['name', 'teams']
+            new:
+                fields: 
+                    - { property: 'name', icon: 'user' }
+            form: 
+                fields: 
+                    - { type: 'section', label: 'Player Details' }
+                    - { property: 'name', icon: 'user' }
+                    - { property: 'teams', type_options: { required: false } }
+            edit:
+                fields: 
+                    - { property: 'name', icon: 'customer' }
+                    - { property: 'teams', type_options: { required: false } }
+            help: 'Add your data'
+            show: # 'help' is not defined, so the global help message is displayed
+                # ...
+                max_results: 30
+            search:
+                # use the null value to not display the inherited global help message
+                help: null
+
+        #TABLE TEAM ['id', 'name']
+        Team: 
+            class: AppBundle\Entity\Team
+            label: 'Team'
+            list: 
+                title: '%%entity_label%% listing'
+                help: 'List of Team table'
+                fields: 
+                    - { property: 'name', icon: 'users' }
+                    - { property: 'players', type: 'array' }
+            form:
+                fields:
+                    - { property: 'name', icon: 'users' }
+                    - { property: 'players', label: 'Players :', type_options: { required: false }}
+
+        #TABLE TEAM_HAS_PLAYERS ['id', 'idPlayer', 'idTeam', 'DateStart', 'DateEnd']
+        #Team_Has_Players:
+        #    class: AppBundle\Entity\Team_Has_Players
+        Article:
+            class: AppBundle\Entity\Article
